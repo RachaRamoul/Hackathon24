@@ -10,23 +10,93 @@
             height: 100vh;
             font-family: Arial, sans-serif;
         }
+        .container {
+            text-align: center;
+        }
         #winner {
             font-size: 2em;
             color: #333;
+            margin-top: 20px;
+        }
+        #timer {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .result span {
+            margin-right: 20px;
+        }
+        .winner {
+            font-size: 1.5em;
+            color: green;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div id="winner"></div>
+    <div class="container">
+        <h2>Enter the Names of the Players and Game Duration</h2>
+        <div>
+            <input type="text" id="player1" placeholder="Player 1 Name">
+            <input type="text" id="player2" placeholder="Player 2 Name">
+            <input type="number" id="time" placeholder="Game Duration (minutes)">
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        <div id="timer"></div>
+        <div class="result" id="result"></div>
+        <div id="winner"></div>
+    </div>
 
     <script>
-        // Make a request to the /winner endpoint
-        fetch('http://localhost:3000/winner')
-            .then(response => response.json())
-            .then(data => {
-                // Display the winner's name
-                document.getElementById('winner').textContent = data.winner;
+        function startGame() {
+            return new Promise((resolve, reject) => {
+                const player1 = document.getElementById('player1').value;
+                const player2 = document.getElementById('player2').value;
+                fetch(`/winner?user1=${player1}&user2=${player2}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resolve(data);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
             });
+        }
+
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            const intervalId = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(intervalId);
+                    startGame().then(data => {
+                        // Display the results here
+                        if (data.user1.count > data.user2.count) {
+                            winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
+                        } else if (data.user2.count > data.user1.count) {
+                            winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
+                        } else {
+                            winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
+                        }
+                    });
+                }
+            }, 1000);
+        }
+        document.getElementById('time').addEventListener('change', function() {
+            const time = parseInt(document.getElementById('time').value) * 60;
+            const timerDisplay = document.getElementById('timer');
+            startTimer(time, timerDisplay);
+        });
     </script>
 </body>
 </html>
