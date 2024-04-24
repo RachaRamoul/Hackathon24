@@ -906,7 +906,7 @@
         {
          "columns":6,
          "firstgid":64496,
-         "image":"..\/..\/..\/..\/Downloads\/map-starter-kit-master\/map-starter-kit-master\/tilesets\/WA_Special_Zones.png",
+         "image":"tilesets\/WA_Special_Zones.png",
          "imageheight":64,
          "imagewidth":192,
          "margin":0,
