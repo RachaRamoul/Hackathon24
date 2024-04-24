@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Winner Display</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #winner {
+            font-size: 2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="winner"></div>
+
+    <script>
+        // Make a request to the /winner endpoint
+        fetch('http://localhost:3000/winner')
+            .then(response => response.json())
+            .then(data => {
+                // Display the winner's name
+                document.getElementById('winner').textContent = data.winner;
+            });
+    </script>
+</body>
+</html>

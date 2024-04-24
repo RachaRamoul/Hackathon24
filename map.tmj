@@ -446,6 +446,17 @@
                  "y":14.0269116471316
                 }, 
                 {
+                 "height":61.6672851518306,
+                 "id":20,
+                 "name":"winnerPopup",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":93.7162209047986,
+                 "x":134.585992065288,
+                 "y":76.0269116471316
+                }, 
+                {
                  "height":128,
                  "id":13,
                  "name":"jitsiChillZone",
@@ -456,14 +467,9 @@
                          "value":true
                         }, 
                         {
-                         "name":"jitsiRoom",
+                         "name":"openWebsite",
                          "type":"string",
-                         "value":"ChillZone"
-                        }, 
-                        {
-                         "name":"jitsiTrigger",
-                         "type":"string",
-                         "value":"onaction"
+                         "value":"jira-game-server\/displayWinner.html"
                         }, 
                         {
                          "name":"zoom_margin",
@@ -666,7 +672,7 @@
          "y":0
         }],
  "nextlayerid":65,
- "nextobjectid":20,
+ "nextobjectid":21,
  "orientation":"orthogonal",
  "properties":[
         {
