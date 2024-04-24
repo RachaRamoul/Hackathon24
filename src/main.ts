@@ -18,7 +18,25 @@ WA.onInit().then(() => {
     })
 
     WA.room.area.onLeave('clock').subscribe(closePopup)
-
+    
+    WA.room.area.onEnter('jitsiChillZone').subscribe(async () => {
+        // const response = await fetch('http://localhost:3000/winner');
+        // const data = await response.json();
+        const test = "racha";        
+        currentPopup = WA.ui.openPopup("winnerPopup", "its" + test, [{
+            label: "OK",
+            className: "success", // This is optional
+            callback: (popup) => {
+                popup.close();
+            }
+        },
+        {
+            label: "Cancel",
+            callback: (popup) => {
+                popup.close();
+            }
+        }]);
+    });
     // The line below bootstraps the Scripting API Extra library that adds a number of advanced properties/features to WorkAdventure
     bootstrapExtra().then(() => {
         console.log('Scripting API Extra ready');
