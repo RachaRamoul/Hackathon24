@@ -16,34 +16,32 @@ app.get('/', (req, res) => {
 });
 
 app.get('/winner', async (req, res) => {
-  const user1 = 'Ramoul Racha';
-  const user2 = 'sarahlina salamani';
-  const user1Count = await getResolvedIssueCount(user1);
-  const user2Count = await getResolvedIssueCount(user2);
-
-  if (user1Count > user2Count) {
-    res.json({ winner: `${user1} is the winner with ${user1Count} resolved issues!` });
-  } else if (user2Count > user1Count) {
-    res.json({ winner: `${user2} is the winner with ${user2Count} resolved issues!` });
-  } else {
-    res.json({ winner: `It's a tie! Both ${user1} and ${user2} have resolved ${user1Count} issues.` });
-  }
+    const user1 = req.query.user1;
+    const user2 = req.query.user2;
+    const time = parseInt(req.query.time) || 1; // Default time is set to 1 minute
+    const user1Data = await getResolvedIssueCount(user1, time);
+    const user2Data = await getResolvedIssueCount(user2, time);
+  
+    res.json({ 
+      user1: { name: user1, count: user1Data.count, time: user1Data.time }, 
+      user2: { name: user2, count: user2Data.count, time: user2Data.time }
+    });
 });
 
-async function getResolvedIssueCount(user) {
-  const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
-    params: {
-      jql: `project = "KAN" AND assignee = "${user}" AND status = Done`,
-      fields: 'summary',
-    },
-    headers: {
-        'Authorization': `Basic ${encodedCredentials}`,
+async function getResolvedIssueCount(user, time) {
+    const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
+      params: {
+        jql: `project = "KAN" AND assignee = "${user}" AND status = Done`,
+        fields: 'summary',
+      },
+      headers: {
+        Authorization: `Basic ${encodedCredentials}`,
         Accept: 'application/json',
-    }
-  });
-
-  return response.data.issues.length;
-}
+      },
+    });
+  
+    return { count: response.data.issues.length, time: time };
+  }
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
