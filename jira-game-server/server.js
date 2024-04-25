@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 const corsOptions = {
@@ -13,8 +14,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // app.use(cors());
 
-const email = 'rachaafaf15@gmail.com';
-const token = 'ATATT3xFfGF02G21Jqhnok0Uavnuyt9uzKQbh22-aQGuJqA9KpwN-DRZ1twWBbUO2fdVhrWHoCW6bmVZWgQQ6UXxPNdjPN4MKmsuQzloveEA386YMhfLeKk13n5xyVBSygA0iL2Xm6TlTF_z5BxXkrraYOuam0MGkbQC1JfADs4Bovr_sAevS5c=079C5884';
+const email = process.env.EMAIL;
+const token = process.env.TOKEN;
 const encodedCredentials = Buffer.from(`${email}:${token}`).toString('base64');
 
 app.use(express.static(__dirname));
@@ -24,7 +25,7 @@ app.use(express.static(__dirname));
 //   next();
 // });
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'displayWinner.html'));
+    res.sendFile(path.join(__dirname, 'playersInformations.html'));
 });
 
 app.get('/winner', async (req, res) => {

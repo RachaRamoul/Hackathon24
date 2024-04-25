@@ -22,8 +22,8 @@ WA.onInit().then(() => {
     WA.room.area.onEnter('jitsiChillZone').subscribe(async () => {
         // const response = await fetch('http://localhost:3000/winner');
         // const data = await response.json();
-        const test = "racha";        
-        currentPopup = WA.ui.openPopup("winnerPopup", "its" + test, [{
+        const title = "Start jira battle";        
+        currentPopup = WA.ui.openPopup("winnerPopup", title, [{
             label: "OK",
             className: "success", // This is optional
             callback: (popup) => {
