@@ -1,0 +1,112 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    color: #2784ff;
+    padding: 20px;
+}
+
+.input-container {
+    margin-bottom: 10px;
+}
+
+.input-container input {
+    margin-right: 10px;
+    background-color: #f0f0f0;
+    width: 350px;
+    height: 45px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    text-indent: 10px;
+}
+
+.input-container label {
+    display: block;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 100px;
+    margin-bottom: 5px;
+    margin-right: 200px;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px; 
+}
+
+
+#startButton {
+    margin-right: 10px;
+    margin-top: 10px;
+    background-color: #2784ff;
+    width: 350px;
+    height: 45px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+#startButton:disabled {
+    background-color: #ccc;
+    color: #666; /
+    cursor: not-allowed;
+}
+
+#winner {
+    font-size: 2em;
+    color: #333;
+    margin-top: 20px;
+}
+
+#timer {
+    font-size: 1.5em;
+    color: #666;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.result {
+    margin-top: 20px;
+}
+
+.result span {
+    margin-right: 20px;
+}
+
+.winner {
+    font-size: 1.5em;
+    color: green;
+    font-weight: bold;
+}
+
+.container h2 {
+    font-weight: normal;
+}
+
+.logo {
+    width: 30px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo-container h2 {
+    margin: 0;
+}
