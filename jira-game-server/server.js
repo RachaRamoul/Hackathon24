@@ -41,8 +41,9 @@ app.get('/winner', async (req, res) => {
     });
 });
 
-async function getResolvedIssueCount(user) {
-    const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
+async function getResolvedIssueCount(user, time) {
+    try{
+      const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
       params: {
         jql: `project = "KAN" AND assignee = "${user}" AND status = Done`,
         fields: 'summary',
@@ -52,9 +53,14 @@ async function getResolvedIssueCount(user) {
         Accept: 'application/json',
       },
     });
-  
-    return { count: response.data.issues.length };
-}
+    return { count: response.data.issues.length, time: time };
+    
+    }catch(error){
+      alert('Error checking name in project:', error);
+      throw error;
+    }
+
+  }
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

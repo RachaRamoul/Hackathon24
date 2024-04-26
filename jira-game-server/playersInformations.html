@@ -4,11 +4,10 @@
 <head>
     <title>Winner Display</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="PlayersInformations.js"></script>
 </head>
 
 <body>
-    <div class="container">
+    <div id='informations' class="container">
         <div class="logo-container">
             <img class="logo" src="https://cdn.icon-icons.com/icons2/2699/PNG/512/atlassian_jira_logo_icon_170511.png"
                 alt="Jira Logo">
@@ -30,9 +29,12 @@
             <div id="timeError" class="error-message"></div>
         </div>
         <button id="startButton" onclick="startGame()">LET'S PLAY !</button>
+    </div>
+    <div>
         <div id="timer"></div>
         <div class="result" id="result"></div>
-        <div id="winner"></div>
+        <div id="winner" class="winner"></div>
     </div>
+    <script src="PlayersInformations.js"></script>
 </body>
 </html>

@@ -33,7 +33,7 @@ function resetErrors(){
     const timeError = document.getElementById('timeError');
     const player1Error = document.getElementById('player1Error');
     const player2Error = document.getElementById('player2Error');
-const startButton = document.getElementById('startButton');
+    const startButton = document.getElementById('startButton');
     player1Error.textContent = '';
     player2Error.textContent = '';
     timeError.textContent = '';
@@ -75,7 +75,7 @@ function displayResult(data) {
 }
 
 function startTimer(duration, display) {
-    console.log('laaaa');
+    const winner = document.getElementById('winner');
     let timer = duration, minutes, seconds;
     const intervalId = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -101,9 +101,13 @@ function startTimer(duration, display) {
     }, 1000);
 }
 
-document.getElementById('time').addEventListener('change', function () {
+document.getElementById('startButton').addEventListener('click', function () {
+    if(!checkName() || !checkDuration() ){
+        return false;
+    }
     const time = parseInt(document.getElementById('time').value) * 60;
     const timerDisplay = document.getElementById('timer');
-
+    const divNoneDisplay = document.getElementById('informations');
+    divNoneDisplay.style.display = 'none';
     startTimer(time, timerDisplay);
 });
