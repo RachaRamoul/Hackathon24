@@ -62,7 +62,7 @@ function startGame() {
     const timerDisplay = document.getElementById('timer');
     startTimer(time * 60, timerDisplay, () => {
         const endTime = toJiraDateTimeFormat(new Date());
-        fetch(`http://localhost:3030/winner?user1=${player1}&user2=${player2}&startTime=${startTime}&endTime=${endTime}`)
+        fetch(`http://localhost:3000/winner?user1=${player1}&user2=${player2}&startTime=${startTime}&endTime=${endTime}`)
             .then(response => response.json())
             .then(data => {
                 displayResult(data);

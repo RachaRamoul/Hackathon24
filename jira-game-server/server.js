@@ -63,6 +63,6 @@ async function getResolvedIssueCount(user, startTime, endTime) {
   }
 }
 
-app.listen(3030, () => {
-  console.log('Server is running on port 3030');
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
