@@ -4,13 +4,25 @@ const axios = require('axios');
 const path = require('path');
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: '*', // replace with the origin you want to allow
+  methods: 'GET,POST', // replace with the methods you want to allow
+  allowedHeaders: 'Content-Type,Authorization' // replace with the headers you want to allow
+};
+
+app.use(cors(corsOptions));
+// app.use(cors());
 
 const email = 'rachaafaf15@gmail.com';
 const token = 'ATATT3xFfGF02G21Jqhnok0Uavnuyt9uzKQbh22-aQGuJqA9KpwN-DRZ1twWBbUO2fdVhrWHoCW6bmVZWgQQ6UXxPNdjPN4MKmsuQzloveEA386YMhfLeKk13n5xyVBSygA0iL2Xm6TlTF_z5BxXkrraYOuam0MGkbQC1JfADs4Bovr_sAevS5c=079C5884';
 const encodedCredentials = Buffer.from(`${email}:${token}`).toString('base64');
 
 app.use(express.static(__dirname));
+
+// app.use((req, res, next) => {
+//   res.header("Content-Security-Policy", "frame-ancestors https://play.workadventu.re");
+//   next();
+// });
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'displayWinner.html'));
 });
@@ -19,16 +31,16 @@ app.get('/winner', async (req, res) => {
     const user1 = req.query.user1;
     const user2 = req.query.user2;
     const time = parseInt(req.query.time) || 1; // Default time is set to 1 minute
-    const user1Data = await getResolvedIssueCount(user1, time);
-    const user2Data = await getResolvedIssueCount(user2, time);
+    const user1Data = await getResolvedIssueCount(user1);
+    const user2Data = await getResolvedIssueCount(user2);
   
     res.json({ 
-      user1: { name: user1, count: user1Data.count, time: user1Data.time }, 
-      user2: { name: user2, count: user2Data.count, time: user2Data.time }
+      user1: { name: user1, count: user1Data.count, time: time }, 
+      user2: { name: user2, count: user2Data.count, time: time }
     });
 });
 
-async function getResolvedIssueCount(user, time) {
+async function getResolvedIssueCount(user) {
     const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
       params: {
         jql: `project = "KAN" AND assignee = "${user}" AND status = Done`,
@@ -40,8 +52,8 @@ async function getResolvedIssueCount(user, time) {
       },
     });
   
-    return { count: response.data.issues.length, time: time };
-  }
+    return { count: response.data.issues.length };
+}
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

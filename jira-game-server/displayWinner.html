@@ -113,11 +113,11 @@
         </div>
         <div class="input-container">
             <label for="player1">PLAYER 1 (NAME) :</label>
-            <input type="text" id="player1" placeholder="Racha">
+            <input type="text" id="player1" placeholder="As configured in Jira">
         </div>
         <div class="input-container">
             <label for="player2">PLAYER 2 (NAME)</label>
-            <input type="text" id="player2" placeholder="Sarah ou Lina ?">
+            <input type="text" id="player2" placeholder="As configured in Jira">
         </div>
         <div class="input-container">
             <label for="time">GAME DURATION</label>
@@ -131,58 +131,69 @@
 
     <script>
         function startGame() {
-            return new Promise((resolve, reject) => {
-                const player1 = document.getElementById('player1').value;
-                const player2 = document.getElementById('player2').value;
-                fetch(`/winner?user1=${player1}&user2=${player2}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        resolve(data);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
+            const player1 = document.getElementById('player1').value;
+            const player2 = document.getElementById('player2').value;
+            const time = document.getElementById('time').value || 1; // Default time is set to 1 minute
+
+            fetch(`http://localhost:3000/winner?user1=${player1}&user2=${player2}&time=${time}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayResult(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
-        function startTimer(duration, display) {
-            let timer = duration, minutes, seconds;
-            const intervalId = setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                if (timer <= 30) {
-                    display.style.color = 'red';
-                } else {
-                    display.style.color = '#666';
-                }
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    clearInterval(intervalId);
-                    startGame().then(data => {
-                        // Display the results here
-                        if (data.user1.count > data.user2.count) {
-                            winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
-                        } else if (data.user2.count > data.user1.count) {
-                            winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
-                        } else {
-                            winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
-                        }
-                    });
-                }
-            }, 1000);
+        function displayResult(data) {
+            const winner = document.getElementById('winner');
+            if (data.user1.count > data.user2.count) {
+                winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
+            } else if (data.user2.count > data.user1.count) {
+                winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
+            } else {
+                winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
+            }
         }
 
-        document.getElementById('time').addEventListener('change', function () {
-            const time = parseInt(document.getElementById('time').value) * 60;
-            const timerDisplay = document.getElementById('timer');
-            startTimer(time, timerDisplay);
-        });
+        // function startTimer(duration, display) {
+        //     let timer = duration, minutes, seconds;
+        //     const intervalId = setInterval(function () {
+        //         minutes = parseInt(timer / 60, 10);
+        //         seconds = parseInt(timer % 60, 10);
+
+        //         minutes = minutes < 10 ? "0" + minutes : minutes;
+        //         seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        //         if (timer <= 30) {
+        //             display.style.color = 'red';
+        //         } else {
+        //             display.style.color = '#666';
+        //         }
+
+        //         display.textContent = minutes + ":" + seconds;
+
+        //         if (--timer < 0) {
+        //             clearInterval(intervalId);
+        //             startGame().then(data => {
+        //                 // Display the results here
+        //                 if (data.user1.count > data.user2.count) {
+        //                     winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
+        //                 } else if (data.user2.count > data.user1.count) {
+        //                     winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
+        //                 } else {
+        //                     winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
+        //                 }
+        //             });
+        //         }
+        //     }, 1000);
+        // }
+
+        // document.getElementById('time').addEventListener('change', function () {
+        //     const time = parseInt(document.getElementById('time').value) * 60;
+        //     const timerDisplay = document.getElementById('timer');
+        //     startTimer(time, timerDisplay);
+        // });
     </script>
 </body>
 </html>
