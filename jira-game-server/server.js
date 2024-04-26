@@ -4,13 +4,25 @@ const axios = require('axios');
 const path = require('path');
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: '*', // replace with the origin you want to allow
+  methods: 'GET,POST', // replace with the methods you want to allow
+  allowedHeaders: 'Content-Type,Authorization' // replace with the headers you want to allow
+};
+
+app.use(cors(corsOptions));
+// app.use(cors());
 
 const email = 'rachaafaf15@gmail.com';
 const token = 'ATATT3xFfGF02G21Jqhnok0Uavnuyt9uzKQbh22-aQGuJqA9KpwN-DRZ1twWBbUO2fdVhrWHoCW6bmVZWgQQ6UXxPNdjPN4MKmsuQzloveEA386YMhfLeKk13n5xyVBSygA0iL2Xm6TlTF_z5BxXkrraYOuam0MGkbQC1JfADs4Bovr_sAevS5c=079C5884';
 const encodedCredentials = Buffer.from(`${email}:${token}`).toString('base64');
 
 app.use(express.static(__dirname));
+
+// app.use((req, res, next) => {
+//   res.header("Content-Security-Policy", "frame-ancestors https://play.workadventu.re");
+//   next();
+// });
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'displayWinner.html'));
 });
