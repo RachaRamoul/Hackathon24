@@ -8,7 +8,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "prod": "vite preview",
-    "start:project": "cd jira-game-server && npm install && pm2 start server.js --name jira-server -f && cd .. && npm install && npm start"
+    "start:project": "npm install && cd jira-game-server && npm install && pm2 start server.js --name jira-server -f && cd .. && npm start"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
@@ -21,6 +21,8 @@
   "dependencies": {
     "@workadventure/scripting-api-extra": "^1.8.1",
     "axios": "^1.6.8",
+    "express": "^4.19.2",
+    "http-proxy-middleware": "^3.0.0",
     "pm2": "^5.3.1"
   }
 }

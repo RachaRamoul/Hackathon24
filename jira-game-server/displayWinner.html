@@ -165,13 +165,24 @@
                 if (--timer < 0) {
                     clearInterval(intervalId);
                     startGame().then(data => {
-                        // Display the results here
                         if (data.user1.count > data.user2.count) {
-                            winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
+                            if (data.user1.issues && data.user1.issues.length > 0) {
+                                winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues: ${data.user1.issues.join(', ')}</div>`;
+                            } else {
+                                winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues: None</div>`;
+                            }
                         } else if (data.user2.count > data.user1.count) {
-                            winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
+                            if (data.user2.issues && data.user2.issues.length > 0) {
+                                winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues: ${data.user2.issues.join(', ')}</div>`;
+                            } else {
+                                winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues: None</div>`;
+                            }
                         } else {
-                            winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
+                            if (data.user1.issues && data.user1.issues.length > 0) {
+                                winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues: ${data.user1.issues.join(', ')}</div>`;
+                            } else {
+                                winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues: None</div>`;
+                            }
                         }
                     });
                 }
@@ -185,4 +196,5 @@
         });
     </script>
 </body>
+
 </html>
