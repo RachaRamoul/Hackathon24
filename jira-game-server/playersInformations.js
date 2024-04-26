@@ -46,19 +46,20 @@ function startGame() {
     if(!checkName() || !checkDuration() ){
         return false;
     }
-    return new Promise((resolve, reject) => {
-        const time = document.getElementById('time').value || 1; // Default time is set to 1 minute
-        const player1 = document.getElementById('player1').value;
-        const player2 = document.getElementById('player2').value;
-            fetch(`http://localhost:3000/winner?user1=${player1}&user2=${player2}&time=${time}`)
+    const player1 = document.getElementById('player1').value;
+    const player2 = document.getElementById('player2').value;
+    const time = document.getElementById('time').value || 1; // Default time is set to 1 minute
+
+    // Start the timer
+    const timerDisplay = document.getElementById('timer');
+    startTimer(time * 60, timerDisplay, () => {
+        fetch(`http://localhost:3000/winner?user1=${player1}&user2=${player2}&time=${time}`)
             .then(response => response.json())
             .then(data => {
                 displayResult(data);
-                resolve(data);
             })
             .catch(error => {
-                console.error('Error :', error);
-                reject(error);
+                console.error('Error:', error);
             });
     });
 }
@@ -74,8 +75,7 @@ function displayResult(data) {
     }
 }
 
-function startTimer(duration, display) {
-    const winner = document.getElementById('winner');
+function startTimer(duration, display, callback) {
     let timer = duration, minutes, seconds;
     const intervalId = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -94,9 +94,7 @@ function startTimer(duration, display) {
 
         if (--timer < 0) {
             clearInterval(intervalId);
-            startGame().then(data => {
-                displayResult(data);
-            });
+            callback();
         }
     }, 1000);
 }
