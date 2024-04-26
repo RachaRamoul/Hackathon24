@@ -33,7 +33,7 @@ function resetErrors(){
     const timeError = document.getElementById('timeError');
     const player1Error = document.getElementById('player1Error');
     const player2Error = document.getElementById('player2Error');
-const startButton = document.getElementById('startButton');
+    const startButton = document.getElementById('startButton');
     player1Error.textContent = '';
     player2Error.textContent = '';
     timeError.textContent = '';
@@ -49,19 +49,25 @@ function startGame() {
     return new Promise((resolve, reject) => {
         const player1 = document.getElementById('player1').value;
         const player2 = document.getElementById('player2').value;
-        fetch(`/winner?user1=${player1}&user2=${player2}`)
-            .then(response => response.json())
+        fetch(`/winner?user1=${encodeURIComponent(player1)}&user2=${encodeURIComponent(player2)}`)
+            .then(response => {
+                if(!response.ok){
+                    throw new Error('Network response was not ok.');
+                }
+                return response.json();
+            })
             .then(data => {
                 resolve(data);
             })
             .catch(error => {
+                console.error('Error fetching game data:', error);
                 reject(error);
             });
     });
 }
 
 function startTimer(duration, display) {
-    console.log('laaaa');
+    const winner = document.getElementById('winner');
     let timer = duration, minutes, seconds;
     const intervalId = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -83,22 +89,24 @@ function startTimer(duration, display) {
             startGame().then(data => {
                 // Display the results here
                 if (data.user1.count > data.user2.count) {
-                    winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
+                    winner.textContent = `${data.user1.name} is the winner with ${data.user1.count} resolved issues!`;
                 } else if (data.user2.count > data.user1.count) {
-                    winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
+                    winner.textContent = `${data.user2.name} is the winner with ${data.user2.count} resolved issues!`;
                 } else {
-                    winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
+                    winner.textContent = `It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.`;
                 }
             });
         }
     }, 1000);
 }
 
-document.getElementById('time').addEventListener('change', function () {
-    console.log('ici');
+document.getElementById('startButton').addEventListener('click', function () {
+    if(!checkName() || !checkDuration() ){
+        return false;
+    }
     const time = parseInt(document.getElementById('time').value) * 60;
     const timerDisplay = document.getElementById('timer');
-    console.log('non ici');
-
+    const divNoneDisplay = document.getElementById('informations');
+    divNoneDisplay.style.display = 'none';
     startTimer(time, timerDisplay);
 });

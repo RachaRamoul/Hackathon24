@@ -60,20 +60,16 @@ body {
 
 #startButton:disabled {
     background-color: #ccc;
-    color: #666; /
+    color: #666; 
     cursor: not-allowed;
 }
 
-#winner {
-    font-size: 2em;
-    color: #333;
-    margin-top: 20px;
-}
 
 #timer {
     font-size: 1.5em;
     color: #666;
     margin-bottom: 10px;
+    text-align: center;
     margin-top: 10px;
 }
 

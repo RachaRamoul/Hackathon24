@@ -30,7 +30,8 @@ app.get('/winner', async (req, res) => {
 });
 
 async function getResolvedIssueCount(user, time) {
-    const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
+    try{
+      const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
       params: {
         jql: `project = "KAN" AND assignee = "${user}" AND status = Done`,
         fields: 'summary',
@@ -42,6 +43,11 @@ async function getResolvedIssueCount(user, time) {
     });
   
     return { count: response.data.issues.length, time: time };
+    }catch(error){
+      alert('Error checking name in project:', error);
+      throw error;
+    }
+
   }
 
 app.listen(3000, () => {
