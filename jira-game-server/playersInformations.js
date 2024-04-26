@@ -40,7 +40,14 @@ function resetErrors(){
     startButton.disabled = false;
 
 }
-
+function toJiraDateTimeFormat(date) {
+    const yyyy = date.getFullYear();
+    const MM = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const HH = String(date.getHours()).padStart(2, '0');
+    const mm = String(date.getMinutes()).padStart(2, '0');
+    return `${yyyy}-${MM}-${dd} ${HH}:${mm}`;
+  }
 function startGame() {
     resetErrors();
     if(!checkName() || !checkDuration() ){
@@ -49,11 +56,13 @@ function startGame() {
     const player1 = document.getElementById('player1').value;
     const player2 = document.getElementById('player2').value;
     const time = document.getElementById('time').value || 1; // Default time is set to 1 minute
+    const startTime = toJiraDateTimeFormat(new Date());
 
     // Start the timer
     const timerDisplay = document.getElementById('timer');
     startTimer(time * 60, timerDisplay, () => {
-        fetch(`http://localhost:3000/winner?user1=${player1}&user2=${player2}&time=${time}`)
+        const endTime = toJiraDateTimeFormat(new Date());
+        fetch(`http://localhost:3030/winner?user1=${player1}&user2=${player2}&startTime=${startTime}&endTime=${endTime}`)
             .then(response => response.json())
             .then(data => {
                 displayResult(data);
