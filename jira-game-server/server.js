@@ -54,7 +54,6 @@ async function getResolvedIssueCount(user, time) {
       },
     });
     return { count: response.data.issues.length, time: time };
-    
     }catch(error){
       alert('Error checking name in project:', error);
       throw error;
