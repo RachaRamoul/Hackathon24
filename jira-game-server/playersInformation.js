@@ -9,8 +9,6 @@ document.getElementById('start-match-button').addEventListener('click', () => {
         return;
     }
     const matchDurationInSeconds = matchDurationInMinutes * 60;
-    const divNoneDisplay = document.getElementById('information');
-    divNoneDisplay.style.display = 'none';
     socket.emit('startMatch', {player1, player2, matchDurationInSeconds});
 
 });
@@ -67,14 +65,21 @@ function checkName(player1, player2) {
 
     if (!player1) {
         player1Error.textContent = 'Please enter a valid name for Player 1.';
+        if(!player2){
+            player2Error.textContent = 'Please enter a valid name for Player 2.';
+        }else{
+            player2Error.textContent = '';
+        }
         return false;
-    }if(!player2){
-        player2Error.textContent = 'Please enter a valid name for Player 2.';
-        return false;
-    }else {
+    }else{
         player1Error.textContent = '';
-        player2Error.textContent = '';
-        return true;
+        if(!player2){
+            player2Error.textContent = 'Please enter a valid name for Player 2.';
+            return false;
+        }else{
+            player2Error.textContent = '';
+            return true;
+        }
     }
 }
 
@@ -89,50 +94,37 @@ function checkDuration(matchDuration) {
     }
 }
 
-function resetErrors(){
-    const timeError = document.getElementById('timeError');
-    const player1Error = document.getElementById('player1Error');
-    const player2Error = document.getElementById('player2Error');
-    const startButton = document.getElementById('startButton');
-    player1Error.textContent = '';
-    player2Error.textContent = '';
-    timeError.textContent = '';
-    startButton.disabled = false;
-
-}
-
-function startGame() {
-    resetErrors();
-    if(!checkName() || !checkDuration() ){
-        return false;
-    }
-    const player1 = document.getElementById('player1').value;
-    const player2 = document.getElementById('player2').value;
-    const time = document.getElementById('time').value || 1; // Default time is set to 1 minute
-
-    // Start the timer
-    const timerDisplay = document.getElementById('timer');
-    startTimer(time * 60, timerDisplay, () => {
-        fetch(`http://localhost:3000/winner?user1=${player1}&user2=${player2}&time=${time}`)
-            .then(response => response.json())
-            .then(data => {
-                displayResult(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    });
-}
 
 function displayResult(data) {
     const winner = document.getElementById('winner');
-    const { hours, minutes, seconds } = calculateTimeComponents(data.user1.time);
+    let winnerMessage = '';
+    let user1Issues = '';
+    let user2Issues = '';
 
+    // Generate the list of issues for each user or output 'None' if no issues have been resolved
+    user1Issues = data.user1.issues.length ? data.user1.issues.map(issue => `<li>${issue}</li>`).join('') : 'None';
+    user2Issues = data.user2.issues.length ? data.user2.issues.map(issue => `<li>${issue}</li>`).join('') : 'None';
+
+    // Determine the winner and generate the winner message
     if (data.user1.count > data.user2.count) {
-        winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues in ${formatTimeToDisplay(hours, minutes, seconds)}!</div>`;
+        winnerMessage = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
     } else if (data.user2.count > data.user1.count) {
-        winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues in ${formatTimeToDisplay(hours, minutes, seconds)}!</div>`;
+        winnerMessage = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
     } else {
-        winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues in ${formatTimeToDisplay(hours, minutes, seconds)}.</div>`;
+        winnerMessage = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
     }
+
+    // Display the winner message and the list of issues for each user
+    winner.innerHTML = `
+        ${winnerMessage}
+        <div class="issues">
+            <h3>${data.user1.name}'s resolved issues:</h3>
+            <ul>${user1Issues}</ul>
+            <h3>${data.user2.name}'s resolved issues:</h3>
+            <ul>${user2Issues}</ul>
+        </div>
+    `;
 }
+
+
+
