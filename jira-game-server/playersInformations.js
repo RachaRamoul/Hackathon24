@@ -1,26 +1,86 @@
-function checkName() {
+  const socket = io();
+  
+  // Écoute de la soumission du formulaire de durée du match
+document.getElementById('start-match-button').addEventListener('click', () => {
     const player1 = document.getElementById('player1').value.trim();
     const player2 = document.getElementById('player2').value.trim();
+    const matchDurationInMinutes = parseInt(document.getElementById('time').value);
+    if (!checkName(player1, player2) || !checkDuration(matchDurationInMinutes)) {
+        return;
+    }
+    const matchDurationInSeconds = matchDurationInMinutes * 60;
+    const divNoneDisplay = document.getElementById('information');
+    divNoneDisplay.style.display = 'none';
+    socket.emit('startMatch', {player1, player2, matchDurationInSeconds});
+
+});
+
+socket.on('informationDisplay', ()=>{
+    const divNoneDisplay = document.getElementById('information');
+    divNoneDisplay.style.display = 'none';
+});
+
+// Écoute de l'événement 'updateTimer' pour mettre à jour le chronomètre
+socket.on('updateTimer', (remainingSeconds) => {
+    const { hours, minutes, seconds } = calculateTimeComponents(remainingSeconds);
+    const timerElement = document.getElementById('timer');
+    timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    if (remainingSeconds <= 10) {
+        timerElement.style.color = 'red';
+    }else if(remainingSeconds <= 30){
+        timerElement.style.color = 'orange';
+    } else {
+        timerElement.style.color = 'black';
+    }
+
+});
+
+socket.on('matchResult', (data) => {
+    displayResult(data);
+});
+
+function calculateTimeComponents(remainingSeconds) {
+    const hours = Math.floor(remainingSeconds / 3600);
+    const minutes = Math.floor((remainingSeconds % 3600) / 60);
+    const seconds = remainingSeconds % 60;
+    return { hours, minutes, seconds };
+}
+
+function formatTimeToDisplay(hours, minutes, seconds) {
+    let displayText = ''; 
+    if (hours > 0) {
+        displayText += `${hours} hour${hours > 1 ? 's' : ''}`;
+        displayText += (minutes > 0 && seconds === 0) ? ' and ' : '';
+    }if (minutes > 0) {
+        displayText += `${minutes} minute${minutes > 1 ? 's' : ''}`;
+        displayText += (seconds > 0) ? ' and ' : '';
+    }if (seconds > 0) {
+        displayText += `${seconds} second${seconds > 1 ? 's' : ''}`;
+    }
+    return displayText;
+}
+  
+function checkName(player1, player2) {
     const player1Error = document.getElementById('player1Error');
     const player2Error = document.getElementById('player2Error');
 
-    if (player1 === '' || player2 === '') {
+    if (!player1) {
         player1Error.textContent = 'Please enter a valid name for Player 1.';
+        return false;
+    }if(!player2){
         player2Error.textContent = 'Please enter a valid name for Player 2.';
         return false;
-    } else {
+    }else {
         player1Error.textContent = '';
         player2Error.textContent = '';
         return true;
     }
 }
 
-function checkDuration() {
-    const timeInput = document.getElementById('time');
-    const timeValue = parseInt(timeInput.value, 10);
+function checkDuration(matchDuration) {
     const timeError = document.getElementById('timeError');
-
-    if (isNaN(timeValue) || !Number.isInteger(timeValue) || timeValue < 0 || timeValue > 420) {
+    if (isNaN(matchDuration) || !Number.isInteger(matchDuration) || matchDuration < 0 || matchDuration > 420) {
         timeError.textContent = 'Please enter a valid game duration between 1 and 420 minutes.';
         return false;
     } else {
@@ -66,46 +126,13 @@ function startGame() {
 
 function displayResult(data) {
     const winner = document.getElementById('winner');
+    const { hours, minutes, seconds } = calculateTimeComponents(data.user1.time);
+
     if (data.user1.count > data.user2.count) {
-        winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
+        winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues in ${formatTimeToDisplay(hours, minutes, seconds)}!</div>`;
     } else if (data.user2.count > data.user1.count) {
-        winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
+        winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues in ${formatTimeToDisplay(hours, minutes, seconds)}!</div>`;
     } else {
-        winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
+        winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues in ${formatTimeToDisplay(hours, minutes, seconds)}.</div>`;
     }
 }
-
-function startTimer(duration, display, callback) {
-    let timer = duration, minutes, seconds;
-    const intervalId = setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
-
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        if (timer <= 30) {
-            display.style.color = 'red';
-        } else {
-            display.style.color = '#666';
-        }
-
-        display.textContent = minutes + ":" + seconds;
-
-        if (--timer < 0) {
-            clearInterval(intervalId);
-            callback();
-        }
-    }, 1000);
-}
-
-document.getElementById('startButton').addEventListener('click', function () {
-    if(!checkName() || !checkDuration() ){
-        return false;
-    }
-    const time = parseInt(document.getElementById('time').value) * 60;
-    const timerDisplay = document.getElementById('timer');
-    const divNoneDisplay = document.getElementById('informations');
-    divNoneDisplay.style.display = 'none';
-    startTimer(time, timerDisplay);
-});

@@ -469,7 +469,7 @@
                         {
                          "name":"openWebsite",
                          "type":"string",
-                         "value":"jira-game-server\/playersInformations.html"
+                         "value":"http://localhost:3000/"
                         }, 
                         {
                          "name":"openWebsiteTrigger",
