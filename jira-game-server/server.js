@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const app = express();
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://play.workadventu.re'], // replace with the origin you want to allow
+  origin: ['http://localhost:5173', 'https://play.workadventu.re', 'https://racharamoul.github.io/Hackathon24/'], // replace with the origin you want to allow
   methods: 'GET,POST', // replace with the methods you want to allow
   allowedHeaders: 'Content-Type,Authorization' // replace with the headers you want to allow
 };
