@@ -20,7 +20,7 @@ const encodedCredentials = Buffer.from(`${email}:${token}`).toString('base64');
 
 app.use(express.static(__dirname));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'playersInformations.html'));
+    res.sendFile(path.join(__dirname, 'playersInformation.html'));
 });
 
 const server = http.createServer(app);
@@ -34,7 +34,6 @@ io.on('connection', (socket) => {
   socket.on('startMatch', ({player1, player2, matchDurationInSeconds}) => {
     console.log('Début du match avec une durée de', matchDurationInSeconds, 'secondes');
 
-    const informationDisplayState = 'none';
     io.emit('informationDisplay');
 
     // Calcul de l'heure de fin du match en fonction de la durée saisie par l'utilisateur
