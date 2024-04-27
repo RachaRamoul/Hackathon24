@@ -469,7 +469,7 @@
                         {
                          "name":"openWebsite",
                          "type":"string",
-                         "value":"jira-game-server\/playersInformations.html"
+                         "value":"jira-game-server\/playersInformation.html"
                         }, 
                         {
                          "name":"openWebsiteTrigger",

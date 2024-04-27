@@ -27,7 +27,7 @@ app.use(express.static(__dirname));
 //   next();
 // });
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'playersInformations.html'));
+    res.sendFile(path.join(__dirname, 'playersInformation.html'));
 });
 
 app.get('/winner', async (req, res) => {
@@ -37,10 +37,11 @@ app.get('/winner', async (req, res) => {
   const endTime = req.query.endTime;
   const user1Data = await getResolvedIssueCount(user1, startTime, endTime);
   const user2Data = await getResolvedIssueCount(user2, startTime, endTime);
-
+  const user1Issues = user1Data.issues.map(issue => `${issue.summary} - ${issue.key}`);
+  const user2Issues = user2Data.issues.map(issue => `${issue.summary} - ${issue.key}`);
   res.json({ 
-    user1: { name: user1, count: user1Data.count, time: user1Data.time }, 
-    user2: { name: user2, count: user2Data.count, time: user2Data.time }
+    user1: { name: user1, count: user1Data.count, time: user1Data.time, issues: user1Issues }, 
+    user2: { name: user2, count: user2Data.count, time: user2Data.time, issues: user2Issues }
   });
 });
 
@@ -49,20 +50,24 @@ async function getResolvedIssueCount(user, startTime, endTime) {
     const response = await axios.get('https://hackathon-2024.atlassian.net/rest/api/3/search', {
     params: {
       jql: `project = "KAN" AND assignee = "${user}" AND status = Done AND resolutiondate >= "${startTime}" AND resolutiondate <= "${endTime}"`,
-      fields: 'summary',
+      fields: 'summary,key',
     },
     headers: {
       Authorization: `Basic ${encodedCredentials}`,
       Accept: 'application/json',
     },
   });
-  return { count: response.data.issues.length, time: endTime - startTime };
+  const issues = response.data.issues.map(issue => ({
+      summary: issue.fields.summary,
+      key: issue.key,
+  }));
+  return { count: response.data.issues.length, time: endTime - startTime, issues: issues };
   }catch(error){
     console.error('Error checking name in project:', error);
     throw error;
   }
 }
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(3030, () => {
+  console.log('Server is running on port 3030');
 });

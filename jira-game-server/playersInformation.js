@@ -62,7 +62,7 @@ function startGame() {
     const timerDisplay = document.getElementById('timer');
     startTimer(time * 60, timerDisplay, () => {
         const endTime = toJiraDateTimeFormat(new Date());
-        fetch(`http://localhost:3000/winner?user1=${player1}&user2=${player2}&startTime=${startTime}&endTime=${endTime}`)
+        fetch(`http://localhost:3030/winner?user1=${player1}&user2=${player2}&startTime=${startTime}&endTime=${endTime}`)
             .then(response => response.json())
             .then(data => {
                 displayResult(data);
@@ -75,13 +75,33 @@ function startGame() {
 
 function displayResult(data) {
     const winner = document.getElementById('winner');
+    let winnerMessage = '';
+    let user1Issues = '';
+    let user2Issues = '';
+
+    // Generate the list of issues for each user or output 'None' if no issues have been resolved
+    user1Issues = data.user1.issues.length ? data.user1.issues.map(issue => `<li>${issue}</li>`).join('') : 'None';
+    user2Issues = data.user2.issues.length ? data.user2.issues.map(issue => `<li>${issue}</li>`).join('') : 'None';
+
+    // Determine the winner and generate the winner message
     if (data.user1.count > data.user2.count) {
-        winner.innerHTML = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
+        winnerMessage = `<div class="winner">${data.user1.name} is the winner with ${data.user1.count} resolved issues!</div>`;
     } else if (data.user2.count > data.user1.count) {
-        winner.innerHTML = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
+        winnerMessage = `<div class="winner">${data.user2.name} is the winner with ${data.user2.count} resolved issues!</div>`;
     } else {
-        winner.innerHTML = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
+        winnerMessage = `<div class="winner">It's a tie! Both ${data.user1.name} and ${data.user2.name} have resolved ${data.user1.count} issues.</div>`;
     }
+
+    // Display the winner message and the list of issues for each user
+    winner.innerHTML = `
+        ${winnerMessage}
+        <div class="issues">
+            <h3>${data.user1.name}'s resolved issues:</h3>
+            <ul>${user1Issues}</ul>
+            <h3>${data.user2.name}'s resolved issues:</h3>
+            <ul>${user2Issues}</ul>
+        </div>
+    `;
 }
 
 function startTimer(duration, display, callback) {
@@ -114,7 +134,7 @@ document.getElementById('startButton').addEventListener('click', function () {
     }
     const time = parseInt(document.getElementById('time').value) * 60;
     const timerDisplay = document.getElementById('timer');
-    const divNoneDisplay = document.getElementById('informations');
+    const divNoneDisplay = document.getElementById('information');
     divNoneDisplay.style.display = 'none';
     startTimer(time, timerDisplay);
 });
