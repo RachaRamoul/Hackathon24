@@ -82,9 +82,10 @@ body {
 }
 
 .winner {
-    font-size: 1.5em;
-    color: green;
+    font-size: 1.2em;
+    color: rgb(103, 31, 117);
     font-weight: bold;
+    margin: 20px;
 }
 
 .container h2 {
@@ -105,4 +106,28 @@ body {
 
 .logo-container h2 {
     margin: 0;
+}
+.issue-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 0.8em;
+    color: rgb(26, 58, 85);
+    margin: 20px;
+
+}
+
+
+#timerLogo {
+    display: block;
+    width: 50px; 
+    height: auto;
+    margin: 10px auto; 
+}
+#winnerLogo {
+    display: block;
+    width: 50px; 
+    height: auto;
+    margin: 10px auto; 
 }

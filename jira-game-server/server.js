@@ -6,7 +6,7 @@ const socketIo = require('socket.io');
 const path = require('path');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5050;
 const app = express();
 const email = process.env.EMAIL;
 const token = process.env.TOKEN;
@@ -66,8 +66,8 @@ app.get('/winner', async (req, res) => {
   const endTime = req.query.endTime;
   const user1Data = await getResolvedIssueCount(user1, startTime, endTime);
   const user2Data = await getResolvedIssueCount(user2, startTime, endTime);
-  const user1Issues = user1Data.issues.map(issue => `${issue.summary} - ${issue.key}`);
-  const user2Issues = user2Data.issues.map(issue => `${issue.summary} - ${issue.key}`);
+  const user1Issues = user1Data.issues.map(issue => `${issue.key} - ${issue.summary} `);
+  const user2Issues = user2Data.issues.map(issue => `${issue.key} - ${issue.summary}`);
   res.json({ 
     user1: { name: user1, count: user1Data.count, time: user1Data.time, issues: user1Issues }, 
     user2: { name: user2, count: user2Data.count, time: user2Data.time, issues: user2Issues }

@@ -6,8 +6,10 @@ document.getElementById('start-match-button').addEventListener('click', () => {
     const player2 = document.getElementById('player2').value.trim();
     const matchDurationInMinutes = parseInt(document.getElementById('time').value);
     if (!checkName(player1, player2) || !checkDuration(matchDurationInMinutes)) {
+
         return;
     }
+    document.getElementById('timerLogo').style.display = 'block';
     const matchDurationInSeconds = matchDurationInMinutes * 60;
     socket.emit('startMatch', {player1, player2, matchDurationInSeconds});
 
@@ -16,6 +18,8 @@ document.getElementById('start-match-button').addEventListener('click', () => {
 socket.on('informationDisplay', ()=>{
     const divNoneDisplay = document.getElementById('information');
     divNoneDisplay.style.display = 'none';
+    document.getElementById('timerLogo').style.display = 'block';
+
 });
 
 // Écoute de l'événement 'updateTimer' pour mettre à jour le chronomètre
@@ -96,6 +100,12 @@ function checkDuration(matchDuration) {
 
 
 function displayResult(data) {
+    const timerLogo = document.getElementById('timerLogo');
+    timerLogo.style.display = 'none';
+    const winnerLogo = document.getElementById('winnerLogo');
+    winnerLogo.src = 'https://media.istockphoto.com/id/951077800/vector/vector-pixel-art-isolated-cartoon.jpg?s=612x612&w=0&k=20&c=DHat-uqJMB8YpLQDIDeRORT_Q6MsEU3tMLCTAwy4f2Q='; 
+    winnerLogo.alt = 'Symbolic Link'; 
+    winnerLogo.style.display = 'block';
     const winner = document.getElementById('winner');
     let winnerMessage = '';
     let user1Issues = '';
@@ -117,11 +127,15 @@ function displayResult(data) {
     // Display the winner message and the list of issues for each user
     winner.innerHTML = `
         ${winnerMessage}
-        <div class="issues">
-            <h3>${data.user1.name}'s resolved issues:</h3>
-            <ul>${user1Issues}</ul>
-            <h3>${data.user2.name}'s resolved issues:</h3>
-            <ul>${user2Issues}</ul>
+        <div>
+            <div class="issue-box">
+                <h3>${data.user1.name}'s resolved issues:</h3>
+                <ul>${user1Issues}</ul>
+            </div>
+            <div class="issue-box">
+                <h3>${data.user2.name}'s resolved issues:</h3>
+                <ul>${user2Issues}</ul>
+            </div>
         </div>
     `;
 }
