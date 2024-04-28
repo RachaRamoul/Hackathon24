@@ -32,7 +32,9 @@
 
 ## Procédure d'installation et de lancement
 
-* Clone le projet : 
+### Méthode 1
+
+* Cloner le projet : 
 
 ```shell
 git clone git@github.com:RachaRamoul/Hackathon24.git
@@ -63,6 +65,23 @@ npm install
 ```shell
     npm run start
 ```
+
+### Méthode 2
+
+* Cloner le projet : 
+
+```shell
+git clone git@github.com:RachaRamoul/Hackathon24.git
+```
+
+* Se mettre sur le dossier du projet et exécuter la commande suivante :
+
+```shell
+cd Hackathon24
+npm run start:project
+```
+
+*warning: en cas de bugs, faire la méthode 1*
 
 ## Procédure de test
 
