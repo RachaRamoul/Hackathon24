@@ -1,55 +1,79 @@
-# WorkAdventure Map Starter Kit
+# WorkAdventure Map
 
 ![map](./map.png)
 
-This is a starter kit to help you build your own map for [WorkAdventure](https://workadventu.re).
+## Fonctionnalités
 
-To understand how to use this starter kit, follow the tutorial at [https://workadventu.re/map-building](https://workadventu.re/map-building).
+### 3. Hemavathi Birabourame 
 
-## Structure
-* *public*: Static files like PDFs or audio files
-* *src*: Scripts files
-* *tilesets*: All tilesets
-* *map.tmj*: Map file
-* *map.png*: The map thumbnail displayed on the in-game map information
+> Github: hema-brm
 
-If you want to use more than one map file, just add the new map file on root or in a folder.
+- Suivi de paiement
+  - Ajout / Modification / Suppression / Liste
 
-we recommend using 500x500 images for the map thumbnails.
+### 1. Racha Ramoul
 
-If you are going to create custom websites to embed in the map, please reference the HTML files in the `input` option in *vite.config.js*.
+> Github: RachaRamoul
 
-## Requirements
+- Suivi de paiement
+  - Ajout / Modification / Suppression / Liste
+  - Sécurité
+- 
+
+### 2. Sarah Lina Salamani
+
+> Github: Sarahlyna
+ 
+- Authentification
+  - Création table utilisateurs
+
+## Procédure d'installation et de lancement
+
+* Clone le projet : 
+
+```shell
+git clone git@github.com:RachaRamoul/Hackathon24.git
+```
+
+* Se mettre sur le dossier du projet et installer les dépendances :
+
+```shell
+cd Hackathon24
+npm install
+```
+
+* Ouvrir un deuxième terminal et se mettre sur le dossier jira-game-server puis installer les dépendances du serveur : 
+
+```shell
+    cd Hackathon24/jira-game-server
+    npm install
+```
+
+* Lancer le serveur local : 
+
+```shell
+    node server.js
+```
+
+* se remettre sur le premier terminal et lancer le serveur WorkAdventure : 
+
+```shell
+    npm run start
+```
+
+## Procédure de test
+
+* Se connecter sur WorkAdventure avec votre premier Waka et copier le lien d'invitation en cliquant sur le bouton "inviter" en bas.
+
+![share](./share_workadventure.png)
+
+* Coller le lien dans un navigateur et se connecter en tant que 2ème Waka.
+
+* Diriger les 2 Wakas dans le ring et lancer le jeu en même temps.
+
+* Inscrire les informations des joueurs et la durée du match avec l'un des deux Wakas, puis lancer.
+
+## Exigences
 
 Node.js version >=17
 
-## Installation
-
-With npm installed (comes with [node](https://nodejs.org/en/)), run the following commands into a terminal in the root directory of this project:
-
-```shell
-npm install
-npm run dev
-```
-
-## Test production map
-
-You can test the optimized map as it will be in production:
-```sh
-npm run build
-npm run prod
-```
-
-## Licenses
-
-This project contains multiple licenses as follows:
-
-* [Code license](./LICENSE.code) *(all files except those for other licenses)*
-* [Map license](./LICENSE.map) *(`map.tmj` and the map visual as well)*
-* [Assets license](./LICENSE.assets) *(the files inside the `src/assets/` folder)*
-
-### About third party assets
-
-If you add third party assets in your map, do not forget to:
-1. Credit the author and license with the "tilesetCopyright" property present in the properties of each tilesets in the `map.tmj` file
-2. Add the license text in LICENSE.assets

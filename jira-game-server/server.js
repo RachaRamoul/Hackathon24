@@ -6,7 +6,7 @@ const socketIo = require('socket.io');
 const path = require('path');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 3000;
 const app = express();
 const email = process.env.EMAIL;
 const token = process.env.TOKEN;
