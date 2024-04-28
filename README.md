@@ -4,28 +4,31 @@
 
 ## Fonctionnalités
 
-### 3. Hemavathi Birabourame 
-
-> Github: hema-brm
-
-- Suivi de paiement
-  - Ajout / Modification / Suppression / Liste
-
 ### 1. Racha Ramoul
 
 > Github: RachaRamoul
 
-- Suivi de paiement
-  - Ajout / Modification / Suppression / Liste
-  - Sécurité
-- 
+- Création du serveur express
+- Récupération des tickets jira en fonction du nom, du projet et de la date
+- Calcul du nombre de tickets résolus afin de déterminer le gagnant
+- Affichage de l'iframe 
+- Affichage du récapitulatif des tickets résolus et du résultat
 
 ### 2. Sarah Lina Salamani
 
 > Github: Sarahlyna
  
-- Authentification
-  - Création table utilisateurs
+- Récupération de l'ID et du nom des tickets jira résolus
+
+### 3. Hemavathi Birabourame 
+
+> Github: hema-brm
+
+- Synchronisation de l'affichage avec WebSocket
+- Ajout chronomètre côté back-end et affichage côté front-end
+- Vérification du nom et de la durée lors de la saisie utilisateur
+- Intégration de la map personnalisée
+- Ajout d'un déclenchement afin d'afficher le iframe
 
 ## Procédure d'installation et de lancement
 
@@ -55,7 +58,7 @@ npm install
     node server.js
 ```
 
-* se remettre sur le premier terminal et lancer le serveur WorkAdventure : 
+* Se remettre sur le premier terminal et lancer le serveur WorkAdventure : 
 
 ```shell
     npm run start
@@ -69,7 +72,7 @@ npm install
 
 * Coller le lien dans un navigateur et se connecter en tant que 2ème Waka.
 
-* Diriger les 2 Wakas dans le ring et lancer le jeu en même temps.
+* Diriger les 2 Wakas sur le ring et lancer le jeu en même temps.
 
 * Inscrire les informations des joueurs et la durée du match avec l'un des deux Wakas, puis lancer.
 
